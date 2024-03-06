@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { database } from './firebaseConfig';
 import { ref, onValue, set } from 'firebase/database';
 
-const Canvas = ({ width, height }) => {
+const Canvas = ({ width, height, color }) => {
   const [pixels, setPixels] = useState([]);
-  const [lastDrawTime, setLastDrawTime] = useState(0);
+  const [lastDrawTime, setLastDrawTime] = useState(0)
   const COOLDOWN_PERIOD = 5000;
 
   useEffect(() => {
@@ -28,24 +28,24 @@ const Canvas = ({ width, height }) => {
     }
 
     setLastDrawTime(now);
-    const color = '#000000';
 
     set(ref(database, `canvas/${y}/${x}`), color);
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${width}, 10px)` }}>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${width}, 25px)` }}>
       {pixels.map((row, y) =>
         row.map((color, x) => (
           <div
             key={`${x}-${y}`}
             onClick={() => handleDraw(x, y)}
             style={{
-              width: '10px',
-              height: '10px',
+              width: '25px',
+              height: '25px',
               backgroundColor: color || '#fff',
               border: '1px solid #ddd',
-              cursor: 'pointer',
+              cursor: 'crosshair',
+              borderRadius: '8px',
             }}
           />
         ))
