@@ -4,9 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { database } from './firebaseConfig';
 import { ref, onValue, set } from 'firebase/database';
 
-const Canvas = ({ width, height, color }) => {
-  const [pixels, setPixels] = useState([]);
-  const [lastDrawTime, setLastDrawTime] = useState(0)
+type Props = {
+  width: number;
+  height: number;
+  color: string;
+};
+
+type Pixel = string;
+type Pixels = Pixel[][];
+
+const Canvas: React.FC<Props> = ({ width, height, color }) => {
+  const [pixels, setPixels] = useState<Pixels>([]);
+  const [lastDrawTime, setLastDrawTime] = useState<number>(0);
   const COOLDOWN_PERIOD = 500;
 
   useEffect(() => {
@@ -19,8 +28,7 @@ const Canvas = ({ width, height, color }) => {
     return () => unsubscribe();
   }, [width, height]);
 
-
-  const handleDraw = (x, y) => {
+  const handleDraw = (x: number, y: number) => {
     const now = Date.now();
     if (now - lastDrawTime < COOLDOWN_PERIOD) {
       alert(`Please wait ${COOLDOWN_PERIOD / 1000} seconds between drawings.`);
@@ -54,10 +62,12 @@ const Canvas = ({ width, height, color }) => {
   );
 };
 
-function convertTo2DArray(data, width, height) {
-  let result = [];
+type Data = string[][];
+
+function convertTo2DArray(data: Data, width: number, height: number): Pixels {
+  let result: Pixels = [];
   for (let y = 0; y < height; y++) {
-    let row = [];
+    let row: Pixel[] = [];
     for (let x = 0; x < width; x++) {
       row.push(data[y] && data[y][x] ? data[y][x] : '#fff');
     }
@@ -66,7 +76,7 @@ function convertTo2DArray(data, width, height) {
   return result;
 }
 
-function createEmptyGrid(width, height) {
+function createEmptyGrid(width: number, height: number): Pixels {
   return Array.from({ length: height }, () => Array.from({ length: width }, () => '#fff'));
 }
 
