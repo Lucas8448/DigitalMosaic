@@ -7,7 +7,7 @@ import { ref, onValue, set } from 'firebase/database';
 const Canvas = ({ width, height, color }) => {
   const [pixels, setPixels] = useState([]);
   const [lastDrawTime, setLastDrawTime] = useState(0)
-  const COOLDOWN_PERIOD = 5000;
+  const COOLDOWN_PERIOD = 500;
 
   useEffect(() => {
     const canvasRef = ref(database, 'canvas');
